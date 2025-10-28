@@ -400,11 +400,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
     // IMPORTANT: Original coordinate system (5120 x 2008)
-    // The image we have is 2000 x 784, but we use the original coordinate system
-    const COORD_W = 5120;
-    const COORD_H = 2008;
+    // We'll adjust these to match actual image dimensions on load
+    let COORD_W = 5120;
+    let COORD_H = 2008;
     
-    // Original coordinates
+    // Original coordinates - will be scaled on image load
     const locations = [{'x': 597, 'y': 789, 'name': 'New York', 'sightings': 4523, 'type': 'Circle', 'icon': '⭕'}, {'x': 524, 'y': 1618, 'name': 'Pennsylvania', 'sightings': 3987, 'type': 'Dish', 'icon': '🛸'}, {'x': 1121, 'y': 1618, 'name': 'N. Carolina', 'sightings': 3234, 'type': 'Light', 'icon': '🔆'}, {'x': 1650, 'y': 320, 'name': 'Florida', 'sightings': 5621, 'type': 'Light', 'icon': '🔆'}, {'x': 1615, 'y': 1145, 'name': 'Michigan', 'sightings': 3623, 'type': 'Dish', 'icon': '🛸'}, {'x': 2314, 'y': 1691, 'name': 'Arizona', 'sightings': 4234, 'type': 'Light', 'icon': '🔆'}, {'x': 3311, 'y': 527, 'name': 'Ohio', 'sightings': 3756, 'type': 'Circle', 'icon': '⭕'}, {'x': 3602, 'y': 1473, 'name': 'California', 'sightings': 12024, 'type': 'Light', 'icon': '🔆'}, {'x': 4861, 'y': 905, 'name': 'Washington', 'sightings': 5894, 'type': 'Dish', 'icon': '🛸'}, {'x': 4497, 'y': 1851, 'name': 'Texas', 'sightings': 4987, 'type': 'Light', 'icon': '🔆'}];
     
     const canvas = document.getElementById('canvas');
@@ -426,6 +426,21 @@
     let isTouching = false;
     
     image.onload = () => {
+      // Adjust coordinate system and locations to match actual image size
+      const scaleFactor = image.width / COORD_W;
+      console.log('Image loaded:', image.width, 'x', image.height);
+      console.log('Scale factor:', scaleFactor, '(from', COORD_W, 'x', COORD_H, 'to', image.width, 'x', image.height + ')');
+      
+      // Update coordinate system to match actual image
+      COORD_W = image.width;
+      COORD_H = image.height;
+      
+      // Scale all location coordinates to match new coordinate system
+      locations.forEach(loc => {
+        loc.x *= scaleFactor;
+        loc.y *= scaleFactor;
+      });
+      
       document.getElementById('loading').style.display = 'none';
       resizeCanvas();
       initSidebar();
@@ -504,10 +519,11 @@
       
       ctx.clearRect(0, 0, displayWidth, displayHeight);
       
-      // High quality rendering
+      // High quality rendering - use actual image dimensions
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
       
+      // COORD_W/COORD_H now match image.width/image.height, so no scaling needed
       const displayW = COORD_W * scale;
       const displayH = COORD_H * scale;
       ctx.drawImage(image, offsetX, offsetY, displayW, displayH);
