@@ -592,11 +592,9 @@
         el.classList.toggle('active', i === index);
       });
       
-      const targetScale = Math.min(scale * 2.5, 8);
-      const targetX = canvas.width / 2 - loc.x * targetScale;
-      const targetY = canvas.height / 2 - loc.y * targetScale;
-      
-      animateZoom(targetX, targetY, targetScale, () => showPopup(index));
+      // Show popup immediately without zooming
+      draw(); // Redraw to show selection highlight
+      showPopup(index);
     }
     
     function animateZoom(targetX, targetY, targetScale, callback) {
