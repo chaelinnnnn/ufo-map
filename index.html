@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -1103,9 +1104,40 @@
         </div>
       `;
       
+      // Smart popup positioning - avoid covering the clicked location
       const displayWidth = canvas.width / (window.devicePixelRatio || 1);
-      popup.style.left = Math.max(20, Math.min(pos.x - 200, displayWidth - 440)) + 'px';
-      popup.style.top = Math.max(20, pos.y - 250) + 'px';
+      const displayHeight = canvas.height / (window.devicePixelRatio || 1);
+      const popupWidth = 440; // min-width 400px + padding
+      const popupHeight = 550; // estimated with 3D image
+      const margin = 20;
+      const offset = 60; // offset from click point
+      
+      let left, top;
+      
+      // Horizontal positioning: place on the side with more space
+      if (pos.x < displayWidth / 2) {
+        // Click is on left side - place popup on right
+        left = Math.min(pos.x + offset, displayWidth - popupWidth - margin);
+      } else {
+        // Click is on right side - place popup on left
+        left = Math.max(pos.x - popupWidth - offset, margin);
+      }
+      
+      // Vertical positioning: place on the side with more space
+      if (pos.y < displayHeight / 2) {
+        // Click is on top half - place popup below
+        top = Math.min(pos.y + offset, displayHeight - popupHeight - margin);
+      } else {
+        // Click is on bottom half - place popup above
+        top = Math.max(pos.y - popupHeight - offset, margin);
+      }
+      
+      // Ensure popup stays within screen bounds
+      left = Math.max(margin, Math.min(left, displayWidth - popupWidth - margin));
+      top = Math.max(margin, Math.min(top, displayHeight - popupHeight - margin));
+      
+      popup.style.left = left + 'px';
+      popup.style.top = top + 'px';
       popup.classList.add('show');
     } 
     function openSidebar() {
