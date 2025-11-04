@@ -206,6 +206,45 @@
       transform: scale(0.95);
     }
 
+    /* ↓↓↓ 여기 아래에 추가! ↓↓↓ */
+#sightings-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  background: #1a73e8;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: all 0.2s;
+  z-index: 1000;
+}
+
+#sightings-btn:hover {
+  background: #1557b0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
+}
+
+#sightings-btn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  #sightings-btn {
+    top: 16px;
+    right: 16px;
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+}
+
     
 
     
@@ -389,6 +428,12 @@
     <button class="control-btn" id="zoom-out">−</button>
     <button class="control-btn" id="reset">⟲</button>
   </div>
+
+<a href="https://chaelinnnnn.github.io/ufo-sightings/" 
+   id="sightings-btn" 
+   class="sightings-link">
+  UFO Sightings ➜
+</a>
 
   
   <div id="popup">
